@@ -83,5 +83,21 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("tailwind-scrollbar")({ nocompatible: true }),
+    function({ addUtilities }) {
+      addUtilities({
+        '.perspective-1000': {
+          'perspective': '1000px'
+        },
+        '.transform-style-3d': {
+          'transform-style': 'preserve-3d'
+        },
+        '.backface-visibility-hidden': {
+          'backface-visibility': 'hidden'
+        }
+      })
+    }
+  ],
 } satisfies Config;

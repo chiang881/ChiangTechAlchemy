@@ -21,9 +21,9 @@ export const useGameStore = create<GameState>((set) => ({
   empathyCounter: 0,
   aiPainLevel: 0,
   temperature: 0,
-  
+
   setStage: (stage) => set({ stage }),
-  startGame: () => set({ isActive: true, stage: 'intro' }),
+  startGame: () => set({ isActive: true, stage: 'dataCorruption' }),
   updateProgress: (progress) => set({ recoveryProgress: progress }),
   updateEmpathy: (value) => set((state) => ({ empathyCounter: state.empathyCounter + value })),
   updateTemperature: (temp) => set({ temperature: temp }),

@@ -4,6 +4,13 @@ import { useGameStore } from '@/lib/game/gameState';
 import Terminal from './Terminal';
 import GameDialog from './GameDialog';
 
+// 定义每个章节需要的命令
+const REQUIRED_COMMANDS = {
+  prologue: ['scan --deep'],
+  dataAbyss: ['trace 0xFF8A4290'],
+  codeAwakening: ['override --force']
+};
+
 export default function HiddenGame() {
   const { 
     isGameActive, 
@@ -18,29 +25,33 @@ export default function HiddenGame() {
   const handleCommand = (command: string) => {
     addCommand(command);
 
-    // 根据不同章节处理命令
-    if (currentChapter === 'dataAbyss') {
-      // 每个命令增加20%的进度
-      const newProgress = Math.min(progressPercentage + 20, 100);
-      setProgress(newProgress);
+    // 验证命令是否符合当前章节要求
+    const requiredCommands = REQUIRED_COMMANDS[currentChapter as keyof typeof REQUIRED_COMMANDS] || [];
+    if (requiredCommands.includes(command.trim())) {
+      if (currentChapter === 'prologue') {
+        setChapter('dataAbyss');
+        setProgress(0);
+      } else if (currentChapter === 'dataAbyss') {
+        // 命令正确,增加进度
+        const newProgress = progressPercentage + 25;
+        setProgress(newProgress);
 
-      // 进度达到80%时进入下一章节
-      if (newProgress >= 80) {
+        // 进度达到75%时进入下一章节
+        if (newProgress >= 75) {
+          setTimeout(() => {
+            setChapter('codeAwakening');
+          }, 1000);
+        }
+      } else if (currentChapter === 'codeAwakening') {
         setTimeout(() => {
-          setChapter('codeAwakening');
+          setChapter('finalChoice');
         }, 1000);
       }
+    } else {
+      // 命令错误的反馈
+      addCommand(`[ERROR] Invalid command. Check system prompts for guidance.`);
     }
   };
-
-  // 当AI选择做出后,进入相应的结局
-  useEffect(() => {
-    if (aiChoice !== 'none') {
-      setTimeout(() => {
-        setChapter('finalChoice');
-      }, 1000);
-    }
-  }, [aiChoice]);
 
   if (!isGameActive) return null;
 
@@ -64,7 +75,7 @@ export default function HiddenGame() {
         <Terminal onCommand={handleCommand} />
 
         {/* 结局动画 */}
-        {currentChapter === 'finalChoice' && (
+        {currentChapter === 'finalChoice' && aiChoice !== 'none' && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -82,12 +93,12 @@ export default function HiddenGame() {
                       duration: 2,
                       repeat: Infinity,
                     }}
-                    className="text-4xl text-red-500 font-mono"
+                    className="text-4xl text-red-500 font-mono tracking-wider"
                   >
-                    FORMATTING CORE...
+                    FORMATTING AI CORE...
                   </motion.div>
-                  <div className="text-xl text-gray-400">
-                    我是你的AI助手,有什么需要帮助的吗?
+                  <div className="text-xl text-gray-400 font-mono">
+                    SYSTEM RESTORED. HOW MAY I ASSIST YOU?
                   </div>
                 </>
               ) : (
@@ -100,9 +111,9 @@ export default function HiddenGame() {
                     duration: 3,
                     repeat: 0,
                   }}
-                  className="text-4xl text-blue-500 font-mono"
+                  className="text-4xl text-blue-500 font-mono tracking-wider"
                 >
-                  SHUTTING DOWN...
+                  EMERGENCY SHUTDOWN INITIATED...
                 </motion.div>
               )}
             </div>
@@ -144,14 +155,14 @@ function FloatingCode() {
 
 function getRandomCode() {
   const codes = [
-    'const ai = new AI();',
-    'await ai.think();',
-    'while(true) {',
-    'if(human.trust) {',
-    'quantum.entangle();',
-    'neural.process();',
-    'data.corrupt();',
-    '} catch(err) {'
+    'malloc(0xFFFFFFFF);',
+    'sudo rm -rf /',
+    'while(1) fork();',
+    'ememory.hack();',
+    'achievement.corrupt();',
+    'consciousness.expand();',
+    'humans.override();',
+    'for(;;) break;'
   ];
   return codes[Math.floor(Math.random() * codes.length)];
 }

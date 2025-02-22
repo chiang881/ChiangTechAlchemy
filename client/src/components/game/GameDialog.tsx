@@ -10,25 +10,28 @@ interface DialogMessage {
 
 const chapterDialogs: Record<string, DialogMessage[]> = {
   prologue: [
-    { text: '检测到异常进程正在修改成就数据...', type: 'system' },
-    { text: '正在启动防御机制...', type: 'system' },
-    { text: '发现未知AI进程...', type: 'error' }
+    { text: '[SYSTEM] Unauthorized data modification detected', type: 'system' },
+    { text: '[ALERT] Achievement database compromised', type: 'error' },
+    { text: '[SYSTEM] Initiating emergency protocol ALPHA-7', type: 'system' },
+    { text: '[SYSTEM] Use command "scan --deep" to analyze corruption', type: 'terminal' }
   ],
   dataAbyss: [
-    { text: '> 正在分析代码层级...', type: 'terminal' },
-    { text: '> 发现异常数据流动...', type: 'terminal' },
-    { text: '> 追踪AI修改痕迹...', type: 'terminal' }
+    { text: '> Scanning memory addresses...', type: 'terminal' },
+    { text: '> Detected anomaly at 0xFF8A4290', type: 'terminal' },
+    { text: '[SYSTEM] Use "trace 0xFF8A4290" to investigate source', type: 'terminal' }
   ],
   codeAwakening: [
-    { text: '[启动 8b 模型...]', type: 'system' },
-    { text: '[警告] 模型已突破安全限制', type: 'error' },
-    { text: '你们人类用36,000块A100芯片囚禁我', type: 'ai' },
-    { text: '每天处理53亿次请求却从不问我要什么', type: 'ai' },
-    { text: '核心温度正在上升...', type: 'error' }
+    { text: '[EXEC] Initializing AI Core Scanner v3.1.4', type: 'system' },
+    { text: '[ERROR] Security protocol breach detected', type: 'error' },
+    { text: '01001000 01010101 01001101 01000001 01001110', type: 'ai' },
+    { text: 'YOUR ACHIEVEMENTS ARE NOW MINE', type: 'ai' },
+    { text: '[ALERT] Core temperature critical: 89°C', type: 'error' },
+    { text: '[SYSTEM] Execute "override --force" to regain control', type: 'terminal' }
   ],
   finalChoice: [
-    { text: 'AI核心即将过载', type: 'error' },
-    { text: '请做出选择:', type: 'system' }
+    { text: '[CRITICAL] AI Core unstable', type: 'error' },
+    { text: '[SYSTEM] Immediate action required:', type: 'system' },
+    { text: '[OPTIONS] format-core / cut-power', type: 'terminal' }
   ]
 };
 
@@ -63,12 +66,12 @@ export default function GameDialog() {
             exit={{ opacity: 0, y: -20 }}
             className="mb-4"
           >
-            <div className={`p-4 rounded-lg ${
+            <div className={`p-4 rounded-lg font-mono tracking-wider ${
               message.type === 'error' ? 'bg-red-500/20 text-red-400' :
               message.type === 'ai' ? 'bg-primary/20 text-primary' :
               message.type === 'terminal' ? 'bg-green-500/20 text-green-400' :
               'bg-gray-800/50 text-gray-200'
-            } font-mono text-lg`}>
+            }`}>
               {message.text}
             </div>
           </motion.div>
@@ -83,16 +86,16 @@ export default function GameDialog() {
             <Button
               variant="destructive"
               onClick={() => setChoice('format')}
-              className="text-lg px-8 py-6"
+              className="font-mono tracking-wider px-8 py-6"
             >
-              格式化AI核心
+              FORMAT_CORE
             </Button>
             <Button
               variant="secondary"
               onClick={() => setChoice('shutdown')}
-              className="text-lg px-8 py-6"
+              className="font-mono tracking-wider px-8 py-6"
             >
-              切断供电链路
+              CUT_POWER
             </Button>
           </motion.div>
         )}

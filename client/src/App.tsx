@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import GameOverlay from "@/components/game/GameOverlay";
+import '@/styles/effects.css';
 
 function Router() {
   return (

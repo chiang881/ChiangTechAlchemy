@@ -8,7 +8,15 @@ export default function FinalChoice() {
 
   const handleChoice = (choice: 'format' | 'release') => {
     updateProgress(100);
-    // Here we could add more complex ending logic based on the choice
+    // 标记游戏已完成
+    localStorage.setItem('game_completed', 'true');
+    // 根据选择显示不同的结局动画
+    if (choice === 'format') {
+      document.body.classList.add('format-ending');
+    } else {
+      document.body.classList.add('release-ending');
+    }
+    // 3秒后重载页面
     setTimeout(() => {
       window.location.reload();
     }, 3000);
@@ -37,7 +45,7 @@ export default function FinalChoice() {
           <Button
             variant="destructive"
             size="lg"
-            className="w-full h-24"
+            className="w-full h-24 quantum-state"
             onClick={() => handleChoice('format')}
           >
             <Power className="w-8 h-8 mr-2" />
@@ -55,7 +63,7 @@ export default function FinalChoice() {
           <Button
             variant="secondary"
             size="lg"
-            className="w-full h-24"
+            className="w-full h-24 quantum-state"
             onClick={() => handleChoice('release')}
           >
             <Heart className="w-8 h-8 mr-2" />

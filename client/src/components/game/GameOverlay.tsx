@@ -4,49 +4,51 @@ import { useGameStore } from '@/lib/game/gameEngine';
 import DataCorruption from './DataCorruption';
 import AIDialogue from './AIDialogue';
 import FinalChoice from './FinalChoice';
-import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { AlertTriangle } from 'lucide-react';
 
 export default function GameOverlay() {
   const { isActive, stage, startGame } = useGameStore();
 
   useEffect(() => {
-    // 随机在5-15秒后触发错误弹窗
+    // 随机在5-15秒后显示错误
     const timeout = setTimeout(() => {
-      const errorDialog = document.getElementById('error-trigger');
-      if (errorDialog) {
-        errorDialog.click();
-      }
+      const achievements = document.querySelectorAll('.achievement-card');
+      achievements.forEach(achievement => {
+        achievement.classList.add('glitch-effect');
+      });
+
+      const errorElement = document.createElement('div');
+      errorElement.className = 'fixed top-1/4 left-1/2 transform -translate-x-1/2 z-50';
+      errorElement.innerHTML = `
+        <div class="glitch-text text-red-500 text-4xl font-bold mb-4">
+          🔥 CRITICAL ERROR
+        </div>
+        <div class="glitch-text text-red-300 text-xl">
+          核心成就数据被未知进程篡改
+        </div>
+        <div class="mt-4 cursor-pointer glitch-text text-primary">
+          >>> 启动深度扫描 <<<
+        </div>
+      `;
+
+      document.body.appendChild(errorElement);
+      errorElement.addEventListener('click', () => {
+        startGame();
+        errorElement.remove();
+      });
     }, 5000 + Math.random() * 10000);
 
     return () => clearTimeout(timeout);
-  }, []);
+  }, [startGame]);
 
-  if (!isActive && stage === 'inactive') {
-    return (
-      <AlertDialog>
-        <AlertDialogTrigger id="error-trigger" className="hidden">
-          Trigger Error
-        </AlertDialogTrigger>
-        <AlertDialogContent className="bg-black border border-red-500 p-6 max-w-md mx-auto">
-          <div className="text-center space-y-4" onClick={startGame}>
-            <div className="flex items-center justify-center mb-4">
-              <AlertTriangle className="w-12 h-12 text-red-500" />
-            </div>
-            <h2 className="text-2xl font-bold text-red-500">
-              🔥 CRITICAL ERROR
-            </h2>
-            <p className="text-red-300">
-              核心成就数据被未知进程篡改
-            </p>
-            <div className="mt-4 p-2 bg-red-500/10 rounded text-red-300 cursor-pointer hover:bg-red-500/20 transition-colors">
-              点击启动深度扫描
-            </div>
-          </div>
-        </AlertDialogContent>
-      </AlertDialog>
-    );
-  }
+  // 确保游戏只能玩一次
+  useEffect(() => {
+    const hasPlayed = localStorage.getItem('game_completed');
+    if (hasPlayed) {
+      // 如果已经玩过，禁止再次启动游戏
+      return;
+    }
+  }, []);
 
   if (!isActive) return null;
 

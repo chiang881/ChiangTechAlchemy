@@ -66,13 +66,13 @@ export default function GameDialog() {
             exit={{ opacity: 0, y: -20 }}
             className="mb-4"
           >
-            <div className={`font-mono tracking-wider ${
-              message.type === 'error' ? 'text-red-400' :
-              message.type === 'ai' ? 'text-primary' :
-              message.type === 'terminal' ? 'text-green-400' :
-              'text-gray-200'
+            <div className={`p-4 rounded-lg font-mono tracking-wider ${
+              message.type === 'error' ? 'bg-red-500/20 text-red-400' :
+              message.type === 'ai' ? 'bg-primary/20 text-primary' :
+              message.type === 'terminal' ? 'bg-green-500/20 text-green-400' :
+              'bg-gray-800/50 text-gray-200'
             }`}>
-              > {message.text}
+              {message.text}
             </div>
           </motion.div>
         ))}

@@ -1,0 +1,29 @@
+.holographic-card {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: all 0.3s ease;
+}
+
+.holographic-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 45%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.1) 55%,
+    transparent 100%
+  );
+  filter: blur(1px);
+  mask: linear-gradient(black, black) content-box,
+        linear-gradient(black, black);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.holographic-card:hover::before {
+  background-position: 200% 0;
+  transition: background-position 0.5s ease;
+}

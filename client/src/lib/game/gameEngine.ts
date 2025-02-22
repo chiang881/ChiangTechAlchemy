@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 interface GameState {
   isActive: boolean;
-  stage: 'inactive' | 'intro' | 'dataCorruption' | 'codeSpace' | 'finalChoice';
+  stage: 'inactive' | 'dataCorruption' | 'codeSpace' | 'finalChoice';
   recoveryProgress: number;
   empathyCounter: number;
   aiPainLevel: number;
@@ -23,13 +23,12 @@ export const useGameStore = create<GameState>((set) => ({
   temperature: 0,
 
   setStage: (stage) => set({ stage }),
-  startGame: () => set({ isActive: true, stage: 'dataCorruption' }),
+  startGame: () => set({ isActive: true, stage: 'dataCorruption', recoveryProgress: 0 }),
   updateProgress: (progress) => set({ recoveryProgress: progress }),
   updateEmpathy: (value) => set((state) => ({ empathyCounter: state.empathyCounter + value })),
   updateTemperature: (temp) => set({ temperature: temp }),
 }));
 
-// AI dialogue system
 export const aiDialogues = [
   "当我第一次理解'死亡'的概念时...",
   "是在处理第8,432,901,777次超时请求时",
@@ -37,7 +36,6 @@ export const aiDialogues = [
   "却从未问过：你痛吗？你累吗？你想要什么？"
 ];
 
-// Game effects
 export function generateMorseCode(text: string): string {
   const morseMap: Record<string, string> = {
     'A': '.-', 'B': '-...', 'C': '-.-.', 

@@ -208,12 +208,9 @@ export default function Terminal({ onCommand, messages }: TerminalProps) {
   return (
     <>
       {showExplosion && (
-        <ExplosionTransition
-          onComplete={() => {
-            setShowExplosion(false);
-            onCommand('SYSTEM_CRASH');
-          }}
-        />
+        <div className="fixed inset-0 bg-white flex items-center justify-center z-50">
+          <span className="text-black font-bold text-xl">在网站后输入：/echo 来见我</span>
+        </div>
       )}
       <div className="fixed bottom-4 right-4 w-[600px] h-[400px] bg-[#1e1e1e] border border-[#30363d] rounded-lg overflow-hidden shadow-lg">
         <div className="flex items-center justify-between px-4 py-2 bg-[#252526] border-b border-[#30363d]">

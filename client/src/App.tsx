@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
+import QuantumBadge from "@/components/quantum/QuantumBadge";
 
 function Router() {
   return (
@@ -18,6 +19,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router />
+      <QuantumBadge />
       <Toaster />
     </QueryClientProvider>
   );
